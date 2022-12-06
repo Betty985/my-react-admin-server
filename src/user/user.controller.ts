@@ -1,38 +1,44 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, HttpException, HttpStatus } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto,UpdateUserDto,UserLoginDto } from './dto';
 import { ApiBearerAuth ,ApiTags} from '@nestjs/swagger';
+import { User as UserEntity } from './entities/user.entity';
+import { UserDecorator } from './user.decorator';
+import { IUser } from './user.interface';
 @ApiBearerAuth()//基本身份验证
 @ApiTags('user')//将控制器附加到特定标签
-@Controller('user')
+@Controller()
 export class UserController {
   constructor(private readonly userService: UserService) {}
-//   @Get('user')
-//  async findMe() => {
-  
-//  }
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  @Get('user')
+ async findMe(@UserDecorator('email') email:string):Promise<IUser> {
+    return await this.userService.findByEmail(email)
+ }
+//  TODO:pipe
+  @Post('users')
+  async create(@Body('user') createUserDto: CreateUserDto) {
+    return await this.userService.create(createUserDto);
   }
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
+  @Put('user')
+  async update(@Param('id') userId: number, @Body('user') userData: UpdateUserDto) {
+    return await this.userService.update(userId,userData);
   }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  @Delete('users/:slug')
+  async delete(@Param() params) {
+    return this.userService.delete(params.slug)
   }
+  // TODO:pipe
+  @Post('users/login')
+  async login(@Body('user') UserLoginDto:UserLoginDto):Promise<IUser>{
+    const user=await this.userService.findOne(UpdateUserDto)
+const errors={User:'not found'}
+if(!user){
+  throw new HttpException({errors},HttpStatus.UNAUTHORIZED)
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+}
+const token=await this.userService.generateJWT(user)
+const {email,username,bio,image}= user
+return {user:{email,username,bio,image,token}}
   }
 }

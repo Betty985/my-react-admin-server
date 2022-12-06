@@ -16,6 +16,7 @@ export class User {
   image:string;
   @Column()
   password:string;
+  aritcles:string[];
   @BeforeInsert()
  async hashPassword ()  {
     this.password=await argon2.hash(this.password)
