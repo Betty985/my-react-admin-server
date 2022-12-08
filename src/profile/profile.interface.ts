@@ -1,9 +1,9 @@
-export interface ProfileData{
-    username:string;
-    bio:string;
-    image?:string;
-    following?:boolean
+export interface ProfileData {
+  username: string;
+  bio: string;
+  image?: string;
+  following?: boolean;
 }
-export interface IProfile{
-    profile:ProfileData
+export interface IProfile {
+  profile: ProfileData;
 }

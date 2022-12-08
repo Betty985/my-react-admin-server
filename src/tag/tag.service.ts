@@ -6,12 +6,15 @@ import { UpdateTagDto } from './dto/update-tag.dto';
 import { TagEntity } from './entities/tag.entity';
 @Injectable()
 export class TagService {
-  constructor(@InjectRepository(TagEntity) private readonly tagRepository:Repository<TagEntity>){}
+  constructor(
+    @InjectRepository(TagEntity)
+    private readonly tagRepository: Repository<TagEntity>,
+  ) {}
   create(createTagDto: CreateTagDto) {
     return 'This action adds a new tag';
   }
 
-  async findAll():Promise<TagEntity[]> {
+  async findAll(): Promise<TagEntity[]> {
     return await this.tagRepository.find();
   }
 

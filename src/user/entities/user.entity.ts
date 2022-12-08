@@ -1,24 +1,29 @@
-import {Entity,PrimaryColumn,Column,BeforeInsert,JoinTable,ManyToMany,OneToMany} from 'typeorm'
-import {IsEmail} from 'class-validator'
-import argon2 from 'argon2'
+import {
+  Entity,
+  PrimaryColumn,
+  Column,
+  BeforeInsert,
+} from 'typeorm';
+import { IsEmail } from 'class-validator';
+import argon2 from 'argon2';
 @Entity('user')
 export class User {
   @PrimaryColumn()
-  id:number
+  id: number;
   @Column()
-  username:string;
+  username: string;
   @Column()
   @IsEmail()
-  email:string;
-  @Column({default:''})
-  bio:string;
-  @Column({default:''})
-  image:string;
+  email: string;
+  @Column({ default: '' })
+  bio: string;
+  @Column({ default: '' })
+  image: string;
   @Column()
-  password:string;
-  aritcles:string[];
+  password: string;
+  aritcles: string[];
   @BeforeInsert()
- async hashPassword ()  {
-    this.password=await argon2.hash(this.password)
- }
+  async hashPassword() {
+    this.password = await argon2.hash(this.password);
+  }
 }

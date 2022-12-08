@@ -14,16 +14,12 @@ export class ProfileService {
     @InjectRepository(FollowsEntity)
     private readonly followsRepository: Repository<FollowsEntity>,
   ) {}
-  create(createProfileDto: CreateProfileDto) {
-    return 'This action adds a new profile';
-  }
-
   async findAll(): Promise<UserEntity[]> {
     return await this.userRepository.find();
   }
 
-  async findOne(options?: DeepPartial<UserEntity>): Promise<IProfile> {
-    const user = await this.userRepository.findOneBy(options);
+  async findOne(options?:any): Promise<IProfile> {
+    const user = await this.userRepository.findOne(options);
     if (user) {
       delete user.id;
       delete user.password;
@@ -47,7 +43,7 @@ export class ProfileService {
       };
       const follows = await this.followsRepository.findOneBy({
         followerId: id,
-        followingId: profile.id,
+        followingId: _profile.id,
       });
       if (id) {
         profile.following = Boolean(follows);
@@ -61,7 +57,7 @@ export class ProfileService {
     followerId?: number,
     followerEmail?: string,
   ): Promise<IProfile> {
-    if ((follow?!followerEmail:!followerId )|| !username) {
+    if ((follow ? !followerEmail : !followerId) || !username) {
       throw new HttpException(
         'Follower email and username not provided.',
         HttpStatus.BAD_REQUEST,

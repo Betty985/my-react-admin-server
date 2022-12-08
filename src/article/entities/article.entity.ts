@@ -1,2 +1,2 @@
-import {Entity,PrimaryGeneratedColumn} from 'typeorm'
+import { Entity, PrimaryGeneratedColumn } from 'typeorm';
 export class Article {}

@@ -7,7 +7,7 @@ import argon2 from 'argon2';
 import { IUser } from './user.interface';
 import { validate } from 'class-validator';
 import jwt from 'jsonwebtoken';
-import { SECRET } from './config';
+import { SECRET } from '../config';
 const VALIDATION_FAILED = 'Input data validation failed';
 // 提供者的主要思想是它可以作为依赖注入；
 // 这意味着对象之间可以创建各种关系，
